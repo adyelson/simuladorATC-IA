@@ -1,12 +1,14 @@
 export default class Aircraft {
-    constructor( x, y, velX, velY, acceleration,callsign, flightlevel) {
+    constructor( x, y, velX, velY, acceleration,callsign, flightLevel, depLocation, arrLocation) {
         this.callsign = callsign;
         this.positions = [];
         this.direction = null;
-        this.flightlevel = flightlevel;
+        this.flightLevel = flightLevel;
         this.updatePosition(x, y);
         this.updateVelocity(velX, velY);
         this.acceleration = acceleration;
+        this.depLocation = depLocation;
+        this.arrLocation = arrLocation;
     }
 
     updatePosition(x, y) {

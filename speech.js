@@ -1,10 +1,12 @@
-export default function startTalk(){
+function startTalk(){
+    console.log('FALANDO')
+
     const recognition = new webkitSpeechRecognition();
     // Defina o idioma que será reconhecido (no caso, o português do Brasil)
     recognition.lang = 'pt-BR';
     // Iniciar a reconhecimento de fala
 
-    /////->>>recognition.start();
+    recognition.start();
 
     // Criar um evento para processar o resultado da fala reconhecida
     recognition.onresult = (event) => {
@@ -12,6 +14,7 @@ export default function startTalk(){
         const speechToText = event.results[0][0].transcript;
         // Escrever o resultado na página
         document.write(speechToText);
+        console.log(speechToText)
     };
     
     // Quando o reconhecimento de voz receber uma frase, faça algo com ela

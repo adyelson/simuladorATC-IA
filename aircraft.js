@@ -9,6 +9,8 @@ export default class Aircraft {
         this.acceleration = acceleration;
         this.depLocation = depLocation;
         this.arrLocation = arrLocation;
+        this.labelX = this.x+40;
+        this.labelY = this.y-50;
     }
 
     updatePosition(x, y) {
@@ -17,7 +19,7 @@ export default class Aircraft {
 
         this.positions.push({ x: this.x, y: this.y });
 
-        if (this.positions.length > 10) {
+        if (this.positions.length > 9) {
             this.positions.shift();
         }
     }
@@ -25,7 +27,7 @@ export default class Aircraft {
     updateVelocity(velX, velY) {
         this.velX = velX;
         this.velY = velY;
-
+         
         // Calcula e armazena o rumo magnético em graus em relação aos rumos geográficos
         this.direction = Math.round(Math.atan2(this.velY, this.velX) * (180 / Math.PI));
         this.direction = this.direction % 360;
@@ -35,7 +37,8 @@ export default class Aircraft {
     move() {
         this.x += this.velX;
         this.y += this.velY;
-
+        this.labelX += this.velX;
+        this.labelY += this.velY;
         this.updatePosition(this.x, this.y);
     }
 

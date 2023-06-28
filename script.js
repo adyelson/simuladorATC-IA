@@ -1,10 +1,10 @@
 import Aircraft from "./aircraft.js";
 
 const aircrafts = [
-  new Aircraft(10, 10, 0.5, 0.1, 0, "AB123", 35000, "SBKP", "SBSP"),
+  new Aircraft(190, 100, 0.5, 0.1, 0, "TAM2231", 35000, "SBKP", "SBSP"),
   new Aircraft(50, 50, -0.5, 0.5, 0, "CD456", 28000, "SBGR", "SBKP"),
   new Aircraft(100, 100, -0.5, 0.5, 0, "EF789", 32000, "SBRJ", "SBSP"),
-  new Aircraft(200, 200, 2.5, 2.5, 0, "GH012", 40000, "SBSP", "SBGR"),
+  new Aircraft(200, 200, 10.5, 10.5, 0, "GH012", 40000, "SBSP", "SBGR"),
   // Adicione mais instâncias de Aircraft conforme necessário
 ];
 
@@ -21,12 +21,12 @@ function drawAircraft(aircraft) {
   ctxAircraft.beginPath();
   aircraft.positions.forEach((position, index) => {
     // Desenha o rastro apenas a cada 3 segundos
-    if (index % 90 === 0) {
-      const alpha = (index + 1) / (aircraft.positions.length + 1);
-      ctxAircraft.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+   
+      
+      ctxAircraft.fillStyle = `rgba(0, 0, 0)`;
       ctxAircraft.arc(position.x, position.y, 2, 0, 2 * Math.PI);
       ctxAircraft.fill();
-    }
+    
   });
 
   // Desenha o vetor mostrando a posição até 9 minutos à frente
@@ -58,33 +58,36 @@ function drawAircraft(aircraft) {
 }
 
 function drawLabel(aircraft) {
+  const labelX = aircraft.labelX -canvas.offsetLeft// Posição relativa à aeronave
+  const labelY = aircraft.labelY -canvas.offsetTop; // Posição relativa à aeronave
+
   // Desenha a linha tracejada entre a aeronave e a etiqueta
   ctxLabel.setLineDash([5, 3]); // Define o padrão de traço
   ctxLabel.beginPath();
   ctxLabel.moveTo(aircraft.x, aircraft.y);
-  ctxLabel.lineTo(aircraft.x + 30, aircraft.y - 30); // Ajuste a posição da etiqueta aqui
+  ctxLabel.lineTo(labelX, labelY); // Utiliza as posições relativas
   ctxLabel.stroke();
   ctxLabel.setLineDash([]); // Limpa o padrão de traço
 
-  // Desenha a etiqueta com as informações do avião
-  ctxLabel.fillStyle = 'rgba(255, 255, 255, 0.8)';
-  ctxLabel.fillRect(aircraft.x + 40, aircraft.y - 55, 100, 65); // Ajuste a posição da etiqueta aqui
+ 
 
   ctxLabel.strokeStyle = 'black'; // Define a cor da borda
   ctxLabel.lineWidth = 1; // Define a largura da borda
 
   ctxLabel.beginPath();
-  ctxLabel.rect(aircraft.x + 40, aircraft.y - 50, 100, 70); // Ajuste a posição da etiqueta aqui
+  ctxLabel.rect(labelX, labelY, 100, 65); // Utiliza as posições relativas
   ctxLabel.stroke();
 
   ctxLabel.font = '12px Arial';
   ctxLabel.fillStyle = 'black';
-  ctxLabel.fillText('' + aircraft.callsign, aircraft.x + 45, aircraft.y - 35); // Ajuste a posição da etiqueta aqui
-  ctxLabel.fillText('' + aircraft.depLocation, aircraft.x + 45, aircraft.y - 20); // Ajuste a posição da etiqueta aqui
-  ctxLabel.fillText('' + aircraft.arrLocation, aircraft.x + 90, aircraft.y - 20); // Ajuste a posição da etiqueta aqui
-  ctxLabel.fillText('FL ' + Math.floor(aircraft.flightLevel / 100), aircraft.x + 45, aircraft.y - 3); // Ajuste a posição da etiqueta aqui
+  ctxLabel.fillText('' + aircraft.callsign, labelX + 5, labelY + 15); // Utiliza as posições relativas
+  ctxLabel.fillText('' + aircraft.depLocation, labelX + 5, labelY + 30); // Utiliza as posições relativas
+  ctxLabel.fillText('' + aircraft.arrLocation, labelX + 50, labelY + 30); // Utiliza as posições relativas
+  ctxLabel.fillText('FL ' + Math.floor(aircraft.flightLevel / 100), labelX + 5, labelY + 47); // Utiliza as posições relativas
   const resultantVector = Math.sqrt(aircraft.velX ** 2 + aircraft.velY ** 2).toFixed(2);
-  ctxLabel.fillText('' + resultantVector, aircraft.x + 45, aircraft.y + 12); // Ajuste a posição da etiqueta aqui
+  ctxLabel.fillText('' + resultantVector, labelX + 5, labelY + 62); // Utiliza as posições relativas
+
+ 
 }
 
 function drawAllAircrafts() {
@@ -109,44 +112,55 @@ function animate() {
   setTimeout(animate, 3000); // Atualiza a cada 3 segundos
 }
 
-function handleMouseDown(event) {
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
-  const mouseY = event.clientY - rect.top;
+  function handleMouseDown(event) {
+    const mouseX = event.clientX - canvas.offsetLeft;
+    const mouseY = event.clientY - canvas.offsetTop;
+    ctxLabel.fillStyle = 'green';
+    ctxLabel.fillRect(mouseX, mouseY, 100, 65); // Utiliza as posições relativas
 
-  aircrafts.forEach((aircraft) => {
-    const labelX = aircraft.x + 40; // Ajuste a posição da etiqueta aqui
-    const labelY = aircraft.y - 50; // Ajuste a posição da etiqueta aqui
-    const labelWidth = 100;
-    const labelHeight = 70;
+    
+    aircrafts.forEach((aircraft) => {
+      const labelX = aircraft.labelX - canvas.offsetLeft; 
+      const labelY = aircraft.labelY - canvas.offsetTop; 
+      const labelWidth = 100;
+      const labelHeight = 65;
 
-    if (
-      mouseX >= labelX && mouseX <= labelX + labelWidth &&
-      mouseY >= labelY && mouseY <= labelY + labelHeight
-    ) {
-      selectedAircraft = aircraft;
-      offsetX = mouseX - labelX;
-      offsetY = mouseY - labelY;
-    }
-  });
-}
+  // Desenha a etiqueta com as informações do avião
+  ctxLabel.fillStyle = 'red';
+  ctxLabel.fillRect(labelX, labelY, 100, 65); // Utiliza as posições relativas
 
-function handleMouseMove(event) {
-  if (selectedAircraft) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+ 
 
-    selectedAircraft.x = mouseX - offsetX - 40; // Ajuste a posição da etiqueta aqui
-    selectedAircraft.y = mouseY - offsetY + 50; // Ajuste a posição da etiqueta aqui
-
-    drawAllAircrafts();
+      console.log(aircraft.callsign,labelX,labelY)
+      if (
+        mouseX >= labelX && 
+        mouseX <= labelX + labelWidth &&
+        mouseY >= labelY && 
+        mouseY <= labelY + labelHeight
+      ) {
+        selectedAircraft = aircraft;
+        offsetX = mouseX - labelX;
+        offsetY = mouseY - labelY;
+      }
+    });
   }
-}
 
-function handleMouseUp() {
-  selectedAircraft = null;
-}
+  function handleMouseMove(event) {
+    if (selectedAircraft) {
+      const mouseX = event.clientX - canvas.offsetLeft;
+      const mouseY = event.clientY - canvas.offsetTop;
+
+      selectedAircraft.labelX = mouseX - offsetX;
+      selectedAircraft.labelY = mouseY - offsetY;
+
+      drawAllAircrafts();
+    }
+  }
+
+  function handleMouseUp() {
+    selectedAircraft = null;
+  }
+
 
 canvas.addEventListener('mousedown', handleMouseDown);
 canvas.addEventListener('mousemove', handleMouseMove);

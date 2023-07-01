@@ -28,20 +28,31 @@ export function drawAircraft(aircraft) {
     const scaledRadius = 10 / getScale();
 
     // Desenha o rastro do avião com base nas posições passadas
-    
-    aircraft.positions.forEach((position, index) => {
-        // Desenha o rastro apenas a cada 3 segundos
+
+    aircraft.positions.forEach((position) => {
         ctxAircraft.beginPath();
+        // Desenha o rastro apenas a cada 3 segundos
         ctxAircraft.fillStyle = `rgba(0, 0, 0)`;
         ctxAircraft.arc(position.x / getScale(), position.y / getScale(), 2 / getScale(), 0, 2 * Math.PI);
         ctxAircraft.fill();
-        
+
     });
-    
+
     // Desenha o avião como um círculo vazio com um X no meio
     ctxAircraft.beginPath();
     ctxAircraft.strokeStyle = 'black';
     ctxAircraft.arc(scaledX, scaledY, scaledRadius, 0, 2 * Math.PI);
+    ctxAircraft.stroke();
+
+    // Desenha as linhas diagonais para formar o "X"
+    let sizeAdjuste = 2;
+    ctxAircraft.moveTo(scaledX - scaledRadius+sizeAdjuste, scaledY - scaledRadius+sizeAdjuste);
+    ctxAircraft.lineTo(scaledX + scaledRadius-sizeAdjuste, scaledY + scaledRadius-sizeAdjuste);
+    ctxAircraft.moveTo(scaledX + scaledRadius-sizeAdjuste, scaledY - scaledRadius+sizeAdjuste);
+    ctxAircraft.lineTo(scaledX - scaledRadius+sizeAdjuste, scaledY + scaledRadius-sizeAdjuste);
+
+    // Define a cor das linhas do "X" como vermelho
+    ctxAircraft.strokeStyle = 'black';
     ctxAircraft.stroke();
 
     // Desenha o vetor de proa

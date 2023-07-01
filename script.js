@@ -176,7 +176,6 @@ ctxLabel.beginPath();
 ctxLabel.rect(labelX, labelY, scaledWidth, scaledHeight); // Utiliza as posições relativas
 ctxLabel.stroke();
 let fontSize = 14 /scale;
-console.log(fontSize)
 ctxLabel.font = `${fontSize}px Arial`;
 ctxLabel.fillStyle = 'black';
 ctxLabel.fillText('' + aircraft.callsign, labelX +  5/scale, labelY + 15/scale); // Utiliza as posições relativas

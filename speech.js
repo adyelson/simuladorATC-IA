@@ -13,7 +13,7 @@ function startTalk(){
         // Obter o primeiro resultado da fala reconhecida
         const speechToText = event.results[0][0].transcript;
         // Escrever o resultado na página
-        document.write(speechToText);
+        // document.write(speechToText);
         console.log(speechToText)
     };
     
@@ -21,7 +21,7 @@ function startTalk(){
     recognition.addEventListener('result', (event) => {
         // Pega a primeira frase reconhecida
         const firstResult = event.results[0][0].transcript;
-
+        console.log(event)
         // Verifique a frase e execute um comando dependendo dela
         if (firstResult.includes('vetoração')) {
             console.log('curvando agora');

@@ -79,62 +79,24 @@ export default class Aircraft {
     const velocidadeXAtual = this.speed * Math.cos(anguloRumo);
     const velocidadeYAtual = this.speed * Math.sin(anguloRumo);
 
-    const { velocidadeX: velocidadeXNova, velocidadeY: velocidadeYNova } = decomporVelocidade(novaVelocidade, this.direction);
-
+    const velocidadesNovas = this.calculateVelocities(novaVelocidade, this.direction);
+    
     let velocidadeX = velocidadeXAtual;
     let velocidadeY = velocidadeYAtual;
 
-    const tempo = 1; // Tempo em segundos
+    let velocidadeXNova = velocidadesNovas['velX'];
+    let velocidadeYNova = velocidadesNovas['velY'];
+    
 
-    // Acelerar ou desacelerar as velocidades x e y até atingir a nova velocidade
-    while (Math.abs(velocidadeX) < Math.abs(velocidadeXNova) || Math.abs(velocidadeY) < Math.abs(velocidadeYNova)) {
-      if (velocidadeX < velocidadeXNova) {
-        velocidadeX += this.acceleration * tempo;
-        if (velocidadeX > velocidadeXNova) {
-          velocidadeX = velocidadeXNova;
-        }
-      } else if (velocidadeX > velocidadeXNova) {
-        velocidadeX -= this.acceleration * tempo;
-        if (velocidadeX < velocidadeXNova) {
-          velocidadeX = velocidadeXNova;
-        }
-      }
+    
 
-      if (velocidadeY < velocidadeYNova) {
-        velocidadeY += this.acceleration * tempo;
-        if (velocidadeY > velocidadeYNova) {
-          velocidadeY = velocidadeYNova;
-        }
-      } else if (velocidadeY > velocidadeYNova) {
-        velocidadeY -= this.acceleration * tempo;
-        if (velocidadeY < velocidadeYNova) {
-          velocidadeY = velocidadeYNova;
-        }
-      }
-    }
-
-    this.velX = velocidadeX;
-    this.velY = velocidadeY;
+    this.velX = velocidadeXNova;
+    this.velY = velocidadeYNova;
   }
 
-  // Função de decomposição de velocidade (exemplo)
  
-
-
+ 
 }
 
-function decomporVelocidade(velocidade, rumo) {
-  const anguloRumo = (rumo * Math.PI) / 180;
-  const velocidadeX = velocidade * Math.cos(anguloRumo);
-  const velocidadeY = velocidade * Math.sin(anguloRumo);
-  return { velocidadeX, velocidadeY };
 
-  const directionInRadians = (direction - 90) * (Math.PI / 180);
-  
-  // Calcular as velocidades nas direções x e y
-  const velX = speed * Math.cos(directionInRadians);
-  const velY = speed * Math.sin(directionInRadians);
-
-  return { velX, velY };
-}
 

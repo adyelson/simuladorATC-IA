@@ -28,14 +28,16 @@ export function drawAircraft(aircraft) {
     const scaledRadius = 10 / getScale();
 
     // Desenha o rastro do avião com base nas posições passadas
-    ctxAircraft.beginPath();
+    
     aircraft.positions.forEach((position, index) => {
         // Desenha o rastro apenas a cada 3 segundos
+        ctxAircraft.beginPath();
         ctxAircraft.fillStyle = `rgba(0, 0, 0)`;
         ctxAircraft.arc(position.x / getScale(), position.y / getScale(), 2 / getScale(), 0, 2 * Math.PI);
         ctxAircraft.fill();
+        
     });
-
+    
     // Desenha o avião como um círculo vazio com um X no meio
     ctxAircraft.beginPath();
     ctxAircraft.strokeStyle = 'black';

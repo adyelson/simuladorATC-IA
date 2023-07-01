@@ -89,8 +89,5 @@ function obterLetraFonetica(palavra) {
     return null;
   }
   
-  // Exemplo de uso
-  var palavra = 'yank';
-  var letraCorrespondente = obterLetraFonetica(palavra);
-  console.log(letraCorrespondente); // Saída: Y
+  
   

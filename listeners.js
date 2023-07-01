@@ -1,4 +1,6 @@
 
+canvas.addEventListener('wheel', handleMouseWheel);
+
 canvas.addEventListener('mousemove', handleCanvasMouseMoveScreen);
 canvas.addEventListener('mousemove', handleCanvasMouseMove);
 // canvas.addEventListener('mousedown', handleCanvasMouseDown);
@@ -10,6 +12,22 @@ canvas.addEventListener('mouseup', handleMouseUp);
 
 document.addEventListener("keydown", pressKeyR);
 
+function handleMouseWheel(event) {
+    const zoomSpeed = 0.1; // Velocidade do zoom
+  
+    // Verifica a direção do scroll (positivo para cima, negativo para baixo)
+    if (event.deltaY < 0) {
+      scale += zoomSpeed; // Aumenta a escala para zoom in
+    } else {
+      scale -= zoomSpeed; // Diminui a escala para zoom out
+    }
+  
+    // Limita a escala mínima e máxima
+    scale = Math.max(0.5, Math.min(scale, 2));
+  
+  
+    drawAllAircrafts();
+  }
 
 function handleCanvasMouseMoveScreen(event) {
     var x = event.clientX - canvas.getBoundingClientRect().left;

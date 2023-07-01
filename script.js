@@ -8,6 +8,22 @@ const aircrafts = {
   // Adicione mais instâncias de Aircraft conforme necessário
 };
 
+window.aircrafts = aircrafts;
+const canvas = document.querySelector('#myCanvas');
+const ctxAircraft = canvas.getContext('2d');
+const ctxLabel = canvas.getContext('2d');
+const context = canvas.getContext('2d');
+
+
+
+let scale = 1;
+let dragging = false;
+let offsetXCanvas = 0;
+let offsetYCanvas = 0;
+let selectedAircraft = null;
+let offsetX = 0;
+let offsetY = 0;
+
 // Coordenadas geográficas do centro de visualização inicial
 const initialCenter = { latitude: -23.5505, longitude: -46.6333 };
 
@@ -71,19 +87,7 @@ function updateAircraftsCoordinates() {
 updateAircraftsCoordinates();
 
 
-window.aircrafts = aircrafts;
-const canvas = document.querySelector('#myCanvas');
-const ctxAircraft = canvas.getContext('2d');
-const ctxLabel = canvas.getContext('2d');
-const context = canvas.getContext('2d');
 
-let scale = 1;
-let dragging = false;
-let offsetXCanvas = 0;
-let offsetYCanvas = 0;
-let selectedAircraft = null;
-let offsetX = 0;
-let offsetY = 0;
 
 function drawAircraft(aircraft) {
   ctxAircraft.save(); // Salva o estado atual do contexto
@@ -191,24 +195,6 @@ function drawAllAircrafts() {
   
 
   ctxAircraft.restore(); // Restaura o estado anterior do contexto
-}
-canvas.addEventListener('wheel', handleMouseWheel);
-
-function handleMouseWheel(event) {
-  const zoomSpeed = 0.1; // Velocidade do zoom
-
-  // Verifica a direção do scroll (positivo para cima, negativo para baixo)
-  if (event.deltaY < 0) {
-    scale += zoomSpeed; // Aumenta a escala para zoom in
-  } else {
-    scale -= zoomSpeed; // Diminui a escala para zoom out
-  }
-
-  // Limita a escala mínima e máxima
-  scale = Math.max(0.5, Math.min(scale, 2));
-
-
-  drawAllAircrafts();
 }
 
 

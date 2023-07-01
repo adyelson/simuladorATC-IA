@@ -7,18 +7,80 @@ const aircrafts = {
   GH012: new Aircraft(200, 200, 2.5, 2.5, 50, "GH012", 40000, "SBSP", "SBGR"),
   // Adicione mais instâncias de Aircraft conforme necessário
 };
+
+// Coordenadas geográficas do centro de visualização inicial
+const initialCenter = { latitude: -23.5505, longitude: -46.6333 };
+
+// Função para converter coordenadas geográficas em pixels no canvas
+function convertCoordinatesToPixels(latitude, longitude) {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const latitudeRange = { min: -90, max: 90 };
+  const longitudeRange = { min: -180, max: 180 };
+
+  const x = ((longitude - longitudeRange.min) / (longitudeRange.max - longitudeRange.min)) * canvasWidth;
+  const y = ((latitudeRange.max - latitude) / (latitudeRange.max - latitudeRange.min)) * canvasHeight;
+
+  return { x, y };
+}
+
+// Função para converter pixels no canvas em coordenadas geográficas
+function convertPixelsToCoordinates(x, y) {
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const latitudeRange = { min: -90, max: 90 };
+  const longitudeRange = { min: -180, max: 180 };
+
+  const latitude = latitudeRange.max - (y / canvasHeight) * (latitudeRange.max - latitudeRange.min);
+  const longitude = (x / canvasWidth) * (longitudeRange.max - longitudeRange.min) + longitudeRange.min;
+
+  return { latitude, longitude };
+}
+
+// Função para ajustar a visão inicial com base nas coordenadas fornecidas
+function setInitialView() {
+  const centerPixels = convertCoordinatesToPixels(initialCenter.latitude, initialCenter.longitude);
+  const canvasCenterX = canvas.width / 2;
+  const canvasCenterY = canvas.height / 2;
+  offsetXCanvas = canvasCenterX - centerPixels.x;
+  offsetYCanvas = canvasCenterY - centerPixels.y;
+}
+
+// Chame a função setInitialView para ajustar a visão inicial
+setInitialView();
+
+// Função para atualizar as coordenadas das aeronaves com base na posição relativa no canvas
+function updateAircraftsCoordinates() {
+  for (let callsign in aircrafts) {
+    if (aircrafts.hasOwnProperty(callsign)) {
+      const aircraft = aircrafts[callsign];
+      const aircraftPixels = convertCoordinatesToPixels(aircraft.latitude, aircraft.longitude);
+      aircraft.x = aircraftPixels.x + offsetXCanvas;
+      aircraft.y = aircraftPixels.y + offsetYCanvas;
+      aircraft.labelX = aircraft.x + 40;
+      aircraft.labelY = aircraft.y - 50;
+      aircraft.positions.forEach((position) => {
+        position.x = aircraft.x + position.relativeX;
+        position.y = aircraft.y + position.relativeY;
+      });
+    }
+  }
+}
+
+// Chame a função updateAircraftsCoordinates para ajustar as coordenadas das aeronaves
+updateAircraftsCoordinates();
+
+
 window.aircrafts = aircrafts;
 const canvas = document.querySelector('#myCanvas');
 const ctxAircraft = canvas.getContext('2d');
 const ctxLabel = canvas.getContext('2d');
+const context = canvas.getContext('2d');
 
 let scale = 1;
-
 let dragging = false;
 let offsetXCanvas = 0;
 let offsetYCanvas = 0;
-
-
 let selectedAircraft = null;
 let offsetX = 0;
 let offsetY = 0;
@@ -126,10 +188,7 @@ function drawAllAircrafts() {
       drawLabel(aircrafts[callsign]);
     }
   }
-  // aircrafts.forEach((aircraft) => {
-  //   drawAircraft(aircraft);
-  //   drawLabel(aircraft);
-  // });
+  
 
   ctxAircraft.restore(); // Restaura o estado anterior do contexto
 }
@@ -170,186 +229,5 @@ function animate() {
   setTimeout(animate, 3000); // Atualiza a cada 3 segundos
 }
 
-document.addEventListener("keydown", function (event) {
-  // Verifica se a tecla pressionada é a tecla "R"
-  if (event.key === "r" || event.key === "R") {
 
-    for (let callsign in aircrafts) {
-      if (aircrafts.hasOwnProperty(callsign)) {
-        aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
-        aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
-      }
-    }
-
-    // aircrafts.forEach((aircraft) => {
-    //   aircraft.labelX = aircraft.x+40;
-    //   aircraft.labelY = aircraft.y-50;
-    // }); 
-  }
-});
-
-function handleMouseDown(event) {
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
-  const mouseY = event.clientY - rect.top;
-  let allowDrag = 0;
-
-  for (let callsign in aircrafts) {
-    if (aircrafts.hasOwnProperty(callsign)) {
-
-      const labelX = aircrafts[callsign].labelX - rect.left;
-      const labelY = aircrafts[callsign].labelY - rect.top;
-      const labelWidth = 100;
-      const labelHeight = 65;
-
-      //console.log(aircraft.callsign,labelX,labelY)
-
-      if (
-        mouseX >= labelX &&
-        mouseX <= labelX + labelWidth &&
-        mouseY >= labelY &&
-        mouseY <= labelY + labelHeight
-      ) {
-        selectedAircraft = aircrafts[callsign];
-        offsetX = mouseX - labelX;
-        offsetY = mouseY - labelY;
-        allowDrag++;
-      }
-
-    }
-  }
-
-  // aircrafts.forEach((aircraft) => {
-  //   const labelX = aircraft.labelX - rect.left;
-  //   const labelY = aircraft.labelY - rect.top;
-  //   const labelWidth = 100;
-  //   const labelHeight = 65;
-
-  //   //console.log(aircraft.callsign,labelX,labelY)
-
-  //   if (
-  //     mouseX >= labelX && 
-  //     mouseX <= labelX + labelWidth &&
-  //     mouseY >= labelY && 
-  //     mouseY <= labelY + labelHeight
-  //   ) {
-  //     selectedAircraft = aircraft;
-  //     offsetX = mouseX - labelX;
-  //     offsetY = mouseY - labelY;
-  //     allowDrag++;
-  //   }
-
-  // });
-
-  if (allowDrag > 0) {
-
-  } else {
-    handleCanvasMouseDown(event);
-  }
-
-}
-
-function handleMouseMove(event) {
-  if (selectedAircraft) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    selectedAircraft.labelX = mouseX - offsetX;
-    selectedAircraft.labelY = mouseY - offsetY;
-
-    drawAllAircrafts();
-  }
-}
-
-function handleMouseUp() {
-  selectedAircraft = null;
-}
-
-canvas.addEventListener('mousedown', handleMouseDown);
-canvas.addEventListener('mousemove', handleMouseMove);
-canvas.addEventListener('mouseup', handleMouseUp);
-
-
-function handleCanvasMouseDown(event) {
-  dragging = true;
-  offsetXCanvas = event.clientX - canvas.getBoundingClientRect().left;
-  offsetYCanvas = event.clientY - canvas.getBoundingClientRect().top;
-}
-function handleCanvasMouseMove(event) {
-  if (dragging) {
-    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-
-    const deltaX = mouseX - offsetXCanvas;
-    const deltaY = mouseY - offsetYCanvas;
-
-    offsetXCanvas = mouseX;
-    offsetYCanvas = mouseY;
-
-    for (let callsign in aircrafts) {
-      if (aircrafts.hasOwnProperty(callsign)) {
-        aircrafts[callsign].x += deltaX;
-        aircrafts[callsign].y += deltaY;
-        aircrafts[callsign].labelX += deltaX;
-        aircrafts[callsign].labelY += deltaY;
-        aircrafts[callsign].positions.forEach((el) => {
-          el.x += deltaX;
-          el.y += deltaY;
-        })
-      }
-    }
-
-    // aircrafts.forEach((aircraft) => {
-    //   aircraft.x+= deltaX;
-    //   aircraft.y += deltaY;
-    //   aircraft.labelX += deltaX;
-    //   aircraft.labelY += deltaY;
-    //   aircraft.positions.forEach((el)=>{
-    //     el.x += deltaX;
-    //     el.y += deltaY;
-    //   })
-    // });
-
-    drawAllAircrafts();
-  }
-}
-
-function handleCanvasMouseUp() {
-  dragging = false;
-}
-// canvas.addEventListener('mousedown', handleCanvasMouseDown);
-
-canvas.addEventListener('mousemove', handleCanvasMouseMove);
-canvas.addEventListener('mouseup', handleCanvasMouseUp);
-
-
-var context = canvas.getContext('2d');
-
-canvas.addEventListener('mousemove', function (event) {
-  var x = event.clientX - canvas.getBoundingClientRect().left;
-  var y = event.clientY - canvas.getBoundingClientRect().top;
-
-
-  mostrarCursor(x, y);
-});
-
-
-function mostrarCursor(x, y) {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  drawAllAircrafts();
-  var arrowSize = 20;
-  var arrowAngle = 5; // Ângulo de 45 graus
-
-  context.beginPath();
-  context.moveTo(x, y);
-  context.lineTo(x - arrowSize * Math.cos(arrowAngle), y - arrowSize * Math.sin(arrowAngle));
-  context.lineTo(x - arrowSize * Math.sin(arrowAngle), y + arrowSize * Math.cos(arrowAngle));
-  context.lineTo(x, y);
-  context.fillStyle = 'black';
-  context.fill();
-  context.closePath();
-
-
-}
 animate();

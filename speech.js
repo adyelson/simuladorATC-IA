@@ -21,7 +21,7 @@ function startTalk(){
     recognition.addEventListener('result', (event) => {
         // Pega a primeira frase reconhecida
         const firstResult = event.results[0][0].transcript;
-        let listaPalavras = firstResult.split();
+        let listaPalavras = firstResult.split(' ');
         listaPalavras.forEach((element, index) => {
            console.log(`${index}:${element}`) 
         });       

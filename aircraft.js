@@ -1,5 +1,5 @@
 export default class Aircraft {
-constructor( x, y, velX, velY, acceleration,callsign, flightLevel, depLocation, arrLocation) {
+constructor( x, y, velX, velY, acceleration,callsign, flightLevel, depLocation, arrLocation, lat, long) {
     this.callsign = callsign;
     this.positions = [];
     this.direction = null;

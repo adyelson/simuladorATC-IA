@@ -1,4 +1,6 @@
-function mostrarCursor(x, y) {
+import { canvas, context, drawAllAircrafts } from './canvarenderer.js';
+
+export function mostrarCursor(x, y) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawAllAircrafts();
     var arrowSize = 20;

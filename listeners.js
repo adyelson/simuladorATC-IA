@@ -1,5 +1,25 @@
+import { canvas,
+    drawAllAircrafts } from './canvarenderer.js';
+import {
+    getDragging,
+    setDragging,
+    getScale,
+    setScale,
+    getOffsetX,
+    setOffsetX,
+    getOffsetY,
+    setOffsetY,
+    getOffsetXCanvas,
+    setOffsetXCanvas,
+    getOffsetYCanvas,
+    setOffsetYCanvas,
+    getSelectedAircraft,
+    setSelectedAircraft
+  } from './variables.js';
+  
+import { mostrarCursor } from './mousenatela.js';
 
-canvas.addEventListener('wheel', handleMouseWheel);
+export let zoom = canvas.addEventListener('wheel', handleMouseWheel);
 
 canvas.addEventListener('mousemove', handleCanvasMouseMoveScreen);
 canvas.addEventListener('mousemove', handleCanvasMouseMove);
@@ -17,13 +37,13 @@ function handleMouseWheel(event) {
   
     // Verifica a direção do scroll (positivo para cima, negativo para baixo)
     if (event.deltaY < 0) {
-      scale += zoomSpeed; // Aumenta a escala para zoom in
+        setScale(getScale() + zoomSpeed); // Aumenta a escala para zoom in
     } else {
-      scale -= zoomSpeed; // Diminui a escala para zoom out
+        setScale(getScale() - zoomSpeed); // Diminui a escala para zoom out
     }
   
     // Limita a escala mínima e máxima
-    scale = Math.max(0.5, Math.min(scale, 2));
+    setScale(Math.max(0.5, Math.min(getScale(), 2)));
   
   
     drawAllAircrafts();
@@ -36,15 +56,15 @@ function handleCanvasMouseMoveScreen(event) {
 }
 
 function handleCanvasMouseMove(event) {
-    if (dragging) {
+    if (getDragging()) {
         const mouseX = event.clientX - canvas.getBoundingClientRect().left;
         const mouseY = event.clientY - canvas.getBoundingClientRect().top;
 
-        const deltaX = mouseX - offsetXCanvas;
-        const deltaY = mouseY - offsetYCanvas;
+        const deltaX = mouseX - getOffsetXCanvas();
+        const deltaY = mouseY - getOffsetYCanvas();
 
-        offsetXCanvas = mouseX;
-        offsetYCanvas = mouseY;
+        setOffsetXCanvas(mouseX);
+        setOffsetYCanvas(mouseY);
 
         for (let callsign in aircrafts) {
             if (aircrafts.hasOwnProperty(callsign)) {
@@ -64,22 +84,24 @@ function handleCanvasMouseMove(event) {
 }
 
 function handleCanvasMouseDown(event) {
-    dragging = true;
-    offsetXCanvas = event.clientX - canvas.getBoundingClientRect().left;
-    offsetYCanvas = event.clientY - canvas.getBoundingClientRect().top;
+    // dragging = true;
+    setDragging(true);
+    setOffsetXCanvas( event.clientX - canvas.getBoundingClientRect().left);
+    setOffsetYCanvas( event.clientY - canvas.getBoundingClientRect().top);
 }
 
 function handleCanvasMouseUp() {
-    dragging = false;
+    // dragging = false;
+    setDragging(false);
 }
 
 function handleMouseMove(event) {
-    if (selectedAircraft) {
+    if (getSelectedAircraft()) {
         const rect = canvas.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
-        selectedAircraft.labelX = mouseX - offsetX;
-        selectedAircraft.labelY = mouseY - offsetY;
+        getSelectedAircraft().labelX = mouseX - getOffsetX();
+        getSelectedAircraft().labelY = mouseY - getOffsetY();
         drawAllAircrafts();
     }
 }
@@ -107,9 +129,9 @@ function handleMouseDown(event) {
                 mouseY >= labelY &&
                 mouseY <= labelY + labelHeight
             ) {
-                selectedAircraft = aircrafts[callsign];
-                offsetX = mouseX - labelX;
-                offsetY = mouseY - labelY;
+                setSelectedAircraft(aircrafts[callsign]);
+                setOffsetX(mouseX - labelX);
+                setOffsetY(mouseY - labelY);
                 allowDrag++;
             }
 
@@ -123,7 +145,7 @@ function handleMouseDown(event) {
 }
 
 function handleMouseUp() {
-    selectedAircraft = null;
+    setSelectedAircraft(null);
 }
 
 

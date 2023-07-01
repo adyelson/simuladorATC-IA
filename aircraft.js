@@ -41,32 +41,42 @@ move() {
     this.labelY += this.velY;
     this.updatePosition(this.x, this.y);
 }
-
-changeDirection(newMagneticHeading) {
-    const newDirection = newMagneticHeading;
-
-    // Calculate the difference between the new direction and the current direction
-    let deltaDirection = newDirection - this.direction;
-
-    // If the difference is greater than 180 degrees, change the direction to the opposite
-    if (Math.abs(deltaDirection) > 180) {
-        if (deltaDirection > 0) {
-            deltaDirection -= 360;
-        } else {
-            deltaDirection += 360;
-        }
+changeDirection(newMagneticHeading, deltaTime) {
+    const targetDirection = newMagneticHeading;
+    const maxChangePerSecond = 3;
+    const degreesToRadians = Math.PI / 180;
+  
+    // Calculate the difference between the target direction and the current direction
+    let deltaDirection = targetDirection - this.direction;
+  
+    // Normalize the delta direction to the range [-180, 180]
+    if (deltaDirection > 180) {
+      deltaDirection -= 360;
+    } else if (deltaDirection < -180) {
+      deltaDirection += 360;
     }
-
-    // Update the direction based on the difference and the velocity
+  
+    // Calculate the maximum change based on the time elapsed
+    const maxChange = maxChangePerSecond * deltaTime;
+  
+    // Adjust the delta direction if it exceeds the maximum change
+    if (Math.abs(deltaDirection) > maxChange) {
+      deltaDirection = Math.sign(deltaDirection) * maxChange;
+    }
+  
+    // Update the direction based on the adjusted delta direction
     this.direction += deltaDirection;
+  
+    // Normalize the direction to the range [0, 360]
     this.direction = (this.direction + 360) % 360;
-
+  
     // Update the velX and velY properties based on the new direction
-    const directionInRadians = this.direction * (Math.PI / 180);
+    const directionInRadians = this.direction * degreesToRadians;
     const speed = Math.sqrt(this.velX * this.velX + this.velY * this.velY);
     this.velX = Math.cos(directionInRadians) * speed;
     this.velY = Math.sin(directionInRadians) * speed;
-}
+  }
+  
 
 changeVelocity(newVelocity) {
     const currentSpeed = Math.sqrt(this.velX * this.velX + this.velY * this.velY);

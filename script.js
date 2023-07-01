@@ -1,13 +1,13 @@
 import Aircraft from "./aircraft.js";
 
-const aircrafts = [
-new Aircraft(190, 100, 0.5, 0.1, 0, "TAM2231", 35000, "SBKP", "SBSP"),
-new Aircraft(50, 50, -0.5, 0.5, 0, "CD456", 28000, "SBGR", "SBKP"),
-new Aircraft(100, 100, -0.5, 0.5, 0, "EF789", 32000, "SBRJ", "SBSP"),
-new Aircraft(200, 200, 2.5, 2.5, 0, "GH012", 40000, "SBSP", "SBGR"),
+const aircrafts = {
+  TAM2231: new Aircraft(190, 100, 0.5, 0.1, 0, "TAM2231", 35000, "SBKP", "SBSP"),
+  CD456:  new Aircraft(50, 50, -0.5, 0.5, 0, "CD456", 28000, "SBGR", "SBKP"),
+  EF789:  new Aircraft(100, 100, -0.5, 0.5, 0, "EF789", 32000, "SBRJ", "SBSP"),
+  GH012:  new Aircraft(200, 200, 2.5, 2.5, 0, "GH012", 40000, "SBSP", "SBGR"),
 // Adicione mais instâncias de Aircraft conforme necessário
-];
-
+};
+window.aircrafts = aircrafts;
 const canvas = document.querySelector('#myCanvas');
 const ctxAircraft = canvas.getContext('2d');
 const ctxLabel = canvas.getContext('2d');
@@ -34,16 +34,29 @@ function handleCanvasMouseMove(event) {
     offsetXCanvas = mouseX;
     offsetYCanvas = mouseY;
 
-    aircrafts.forEach((aircraft) => {
-      aircraft.x+= deltaX;
-      aircraft.y += deltaY;
-      aircraft.labelX += deltaX;
-      aircraft.labelY += deltaY;
-      aircraft.positions.forEach((el)=>{
-        el.x += deltaX;
+    for (let callsign in aircrafts) {
+      if (aircrafts.hasOwnProperty(callsign)) {
+        aircrafts[callsign].x+= deltaX;
+        aircrafts[callsign].y += deltaY;
+        aircrafts[callsign].labelX += deltaX;
+        aircrafts[callsign].labelY += deltaY;
+        aircrafts[callsign].positions.forEach((el)=>{
+          el.x += deltaX;
         el.y += deltaY;
       })
-    });
+      }
+    }
+
+    // aircrafts.forEach((aircraft) => {
+    //   aircraft.x+= deltaX;
+    //   aircraft.y += deltaY;
+    //   aircraft.labelX += deltaX;
+    //   aircraft.labelY += deltaY;
+    //   aircraft.positions.forEach((el)=>{
+    //     el.x += deltaX;
+    //     el.y += deltaY;
+    //   })
+    // });
 
     drawAllAircrafts();
   }
@@ -61,46 +74,6 @@ let selectedAircraft = null;
 let offsetX = 0;
 let offsetY = 0;
 
-// function drawAircraft(aircraft) {
-// // Desenha o rastro do avião com base nas posições passadas
-// ctxAircraft.beginPath();
-// aircraft.positions.forEach((position, index) => {
-//   // Desenha o rastro apenas a cada 3 segundos
-  
-    
-//     ctxAircraft.fillStyle = `rgba(0, 0, 0)`;
-//     ctxAircraft.arc(position.x, position.y, 2, 0, 2 * Math.PI);
-//     ctxAircraft.fill();
-  
-// });
-
-// // Desenha o vetor mostrando a posição até 9 minutos à frente
-// const futurePosition = {
-//   x: aircraft.x + aircraft.velX * 1 * 60, // 1 minuto = 1 * 60 segundos
-//   y: aircraft.y + aircraft.velY * 1 * 60,
-// };
-
-// // Desenha o avião como um círculo vazio com um X no meio
-// ctxAircraft.beginPath();
-// ctxAircraft.strokeStyle = 'black';
-// ctxAircraft.arc(aircraft.x, aircraft.y, 10, 0, 2 * Math.PI);
-// ctxAircraft.stroke();
-
-// ctxAircraft.beginPath();
-// ctxAircraft.strokeStyle = 'black';
-// ctxAircraft.moveTo(aircraft.x - 7, aircraft.y - 7);
-// ctxAircraft.lineTo(aircraft.x + 7, aircraft.y + 7);
-// ctxAircraft.moveTo(aircraft.x - 7, aircraft.y + 7);
-// ctxAircraft.lineTo(aircraft.x + 7, aircraft.y - 7);
-// ctxAircraft.stroke();
-
-// // Desenha o vetor de proa
-// ctxAircraft.beginPath();
-// ctxAircraft.strokeStyle = 'black';
-// ctxAircraft.moveTo(aircraft.x, aircraft.y);
-// ctxAircraft.lineTo(futurePosition.x, futurePosition.y);
-// ctxAircraft.stroke();
-// }
 function drawAircraft(aircraft) {
   ctxAircraft.save(); // Salva o estado atual do contexto
   ctxAircraft.scale(scale, scale); // Aplica a escala aos elementos desenhados
@@ -197,10 +170,17 @@ function drawAllAircrafts() {
   ctxAircraft.save(); // Salva o estado atual do contexto
   ctxAircraft.scale(scale, scale); // Aplica a escala ao contexto
 
-  aircrafts.forEach((aircraft) => {
-    drawAircraft(aircraft);
-    drawLabel(aircraft);
-  });
+
+  for (let callsign in aircrafts) {
+    if (aircrafts.hasOwnProperty(callsign)) {
+      drawAircraft(aircrafts[callsign]);
+      drawLabel(aircrafts[callsign]);
+    }
+  }
+  // aircrafts.forEach((aircraft) => {
+  //   drawAircraft(aircraft);
+  //   drawLabel(aircraft);
+  // });
 
   ctxAircraft.restore(); // Restaura o estado anterior do contexto
 }
@@ -225,9 +205,14 @@ function handleMouseWheel(event) {
 
 
 function moveAllAircrafts() {
-aircrafts.forEach((aircraft) => {
-  aircraft.move();
-});
+  for (let callsign in aircrafts) {
+    if (aircrafts.hasOwnProperty(callsign)) {
+      aircrafts[callsign].move();
+    }
+  }
+// aircrafts.forEach((aircraft) => {
+//   aircraft.move();
+// });
 }
 
 function animate() {
@@ -239,10 +224,18 @@ setTimeout(animate, 3000); // Atualiza a cada 3 segundos
 document.addEventListener("keydown", function(event) {
 // Verifica se a tecla pressionada é a tecla "R"
 if (event.key === "r" || event.key === "R") {
-  aircrafts.forEach((aircraft) => {
-    aircraft.labelX = aircraft.x+40;
-    aircraft.labelY = aircraft.y-50;
-  }); 
+
+  for (let callsign in aircrafts) {
+    if (aircrafts.hasOwnProperty(callsign)) {
+      aircrafts[callsign].labelX = aircrafts[callsign].x+40;
+      aircrafts[callsign].labelX = aircrafts[callsign].x+40;
+    }
+  }
+
+  // aircrafts.forEach((aircraft) => {
+  //   aircraft.labelX = aircraft.x+40;
+  //   aircraft.labelY = aircraft.y-50;
+  // }); 
 }
 });
 
@@ -251,28 +244,54 @@ function handleMouseDown(event) {
   const mouseX = event.clientX - rect.left;
   const mouseY = event.clientY - rect.top;
   let allowDrag = 0;
-  aircrafts.forEach((aircraft) => {
-    const labelX = aircraft.labelX - rect.left;
-    const labelY = aircraft.labelY - rect.top;
-    const labelWidth = 100;
-    const labelHeight = 65;
 
-    //console.log(aircraft.callsign,labelX,labelY)
+  for (let callsign in aircrafts) {
+    if (aircrafts.hasOwnProperty(callsign)) {
+      
+      const labelX = aircrafts[callsign].labelX - rect.left;
+      const labelY = aircrafts[callsign].labelY - rect.top;
+      const labelWidth = 100;
+      const labelHeight = 65;
+
+      //console.log(aircraft.callsign,labelX,labelY)
+      
+      if (
+        mouseX >= labelX && 
+        mouseX <= labelX + labelWidth &&
+        mouseY >= labelY && 
+        mouseY <= labelY + labelHeight
+      ) {
+        selectedAircraft = aircrafts[callsign];
+        offsetX = mouseX - labelX;
+        offsetY = mouseY - labelY;
+        allowDrag++;
+      }
     
-    if (
-      mouseX >= labelX && 
-      mouseX <= labelX + labelWidth &&
-      mouseY >= labelY && 
-      mouseY <= labelY + labelHeight
-    ) {
-      selectedAircraft = aircraft;
-      offsetX = mouseX - labelX;
-      offsetY = mouseY - labelY;
-      allowDrag++;
     }
+  }
+
+  // aircrafts.forEach((aircraft) => {
+  //   const labelX = aircraft.labelX - rect.left;
+  //   const labelY = aircraft.labelY - rect.top;
+  //   const labelWidth = 100;
+  //   const labelHeight = 65;
+
+  //   //console.log(aircraft.callsign,labelX,labelY)
     
-    
-  });
+  //   if (
+  //     mouseX >= labelX && 
+  //     mouseX <= labelX + labelWidth &&
+  //     mouseY >= labelY && 
+  //     mouseY <= labelY + labelHeight
+  //   ) {
+  //     selectedAircraft = aircraft;
+  //     offsetX = mouseX - labelX;
+  //     offsetY = mouseY - labelY;
+  //     allowDrag++;
+  //   }
+        
+  // });
+
   if(allowDrag>0){
 
   }else{

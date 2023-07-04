@@ -1,4 +1,4 @@
-export function startTalk(){
+function startTalk(){
    
     const recognition = new webkitSpeechRecognition();
     // Defina o idioma que será reconhecido (no caso, o português do Brasil)

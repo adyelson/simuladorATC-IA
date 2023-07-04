@@ -10,7 +10,8 @@ import {
     getOffsetXCanvas,
     setOffsetXCanvas,
     getOffsetYCanvas,
-    setOffsetYCanvas
+    setOffsetYCanvas,
+    getvetorTime
 } from './variables.js';
 
 export const canvas = document.querySelector('#myCanvas');
@@ -57,8 +58,8 @@ export function drawAircraft(aircraft) {
 
     // Desenha o vetor de proa
     const futurePosition = {
-        x: scaledX + aircraft.velX * 1 * 60 / getScale(),
-        y: scaledY + aircraft.velY * 1 * 60 / getScale(),
+        x: scaledX + aircraft.velX * getvetorTime() * 60 / getScale(),
+        y: scaledY + aircraft.velY * getvetorTime() * 60 / getScale(),
     };
     ctxAircraft.beginPath();
     ctxAircraft.strokeStyle = 'black';

@@ -6,9 +6,18 @@ let state = {
     offsetY: 0,
     offsetXCanvas: 0,
     offsetYCanvas: 0,
-    selectedAircraft: null
+    selectedAircraft: null,
+    vetorTime: 1
   };
   
+  export function setvetorTime(value) {
+    state.vetorTime = value;
+  }
+  
+  export function getvetorTime() {
+    return state.vetorTime;
+  }
+
   export function setSelectedAircraft(value) {
     state.selectedAircraft = value;
   }

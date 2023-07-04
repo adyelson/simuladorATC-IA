@@ -1,5 +1,7 @@
-import { canvas,
-    drawAllAircrafts } from './canvarenderer.js';
+import {
+    canvas,
+    drawAllAircrafts
+} from './canvarenderer.js';
 import {
     getDragging,
     setDragging,
@@ -14,9 +16,10 @@ import {
     getOffsetYCanvas,
     setOffsetYCanvas,
     getSelectedAircraft,
-    setSelectedAircraft
-  } from './variables.js';
-  
+    setSelectedAircraft,
+    setvetorTime
+} from './variables.js';
+
 import { mostrarCursor } from './mousenatela.js';
 
 export let zoom = canvas.addEventListener('wheel', handleMouseWheel);
@@ -31,23 +34,24 @@ canvas.addEventListener('mousedown', handleMouseDown);
 canvas.addEventListener('mouseup', handleMouseUp);
 
 document.addEventListener("keydown", pressKeyR);
+document.addEventListener("keydown", pressKeyNumber);
 
 function handleMouseWheel(event) {
     const zoomSpeed = 0.1; // Velocidade do zoom
-  
+
     // Verifica a direção do scroll (positivo para cima, negativo para baixo)
     if (event.deltaY < 0) {
         setScale(getScale() + zoomSpeed); // Aumenta a escala para zoom in
     } else {
         setScale(getScale() - zoomSpeed); // Diminui a escala para zoom out
     }
-  
+
     // Limita a escala mínima e máxima
     setScale(Math.max(0.5, Math.min(getScale(), 2)));
-  
-  
+
+
     drawAllAircrafts();
-  }
+}
 
 function handleCanvasMouseMoveScreen(event) {
     var x = event.clientX - canvas.getBoundingClientRect().left;
@@ -86,8 +90,8 @@ function handleCanvasMouseMove(event) {
 function handleCanvasMouseDown(event) {
     // dragging = true;
     setDragging(true);
-    setOffsetXCanvas( event.clientX - canvas.getBoundingClientRect().left);
-    setOffsetYCanvas( event.clientY - canvas.getBoundingClientRect().top);
+    setOffsetXCanvas(event.clientX - canvas.getBoundingClientRect().left);
+    setOffsetYCanvas(event.clientY - canvas.getBoundingClientRect().top);
 }
 
 function handleCanvasMouseUp() {
@@ -153,12 +157,17 @@ function handleMouseUp() {
 function pressKeyR(event) {
     // Verifica se a tecla pressionada é a tecla "R"
     if (event.key === "r" || event.key === "R") {
-  
-      for (let callsign in aircrafts) {
-        if (aircrafts.hasOwnProperty(callsign)) {
-          aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
-          aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
+
+        for (let callsign in aircrafts) {
+            if (aircrafts.hasOwnProperty(callsign)) {
+                aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
+                aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
+            }
         }
-      }  
     }
-  }
+}
+
+function pressKeyNumber(event) {
+    setvetorTime(event.key);
+    drawAllAircrafts();
+}

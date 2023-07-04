@@ -35,7 +35,7 @@ export default class Aircraft {
     // Calcular as velocidades nas direções x e y
     const velX = speed * Math.cos(directionInRadians);
     const velY = speed * Math.sin(directionInRadians);
-  
+
     return { velX, velY };
   }
 
@@ -60,27 +60,56 @@ export default class Aircraft {
   mudarVelocidade(newSpeed) {
     let intervalId = setInterval(() => {
       if (this.speed > newSpeed) {
-        this.speed -= this.acceleration;       
+        this.speed -= this.acceleration;
         if (this.speed - newSpeed <= 0) {
           this.speed = newSpeed;
-        }        
+        }
       } else if (this.speed < newSpeed) {
-        
+
         this.speed += this.acceleration;
         if (newSpeed - this.speed <= 0) {
           this.speed = newSpeed;
-        }       
+        }
       } else {
         clearInterval(intervalId); // Encerra o setInterval quando a velocidade atinge o novo valor desejado
       }
       let velocities = this.calculateVelocities(this.speed, this.direction);
-        this.velX = velocities.velX;
-        this.velY = velocities.velY;
+      this.velX = velocities.velX;
+      this.velY = velocities.velY;
     }, 1000);
-    
 
   }
 
+  mudarProa(proa) {
+    const proaAtual = this.direction;
+    const menorCurva = Math.abs(proaAtual - proa);
+    const maiorCurva = 360 - menorCurva;
+    const curvaDireita = proaAtual <= proa ? menorCurva : maiorCurva;
+    const curvaEsquerda = proaAtual <= proa ? maiorCurva : menorCurva;
+    let curva = curvaDireita <= curvaEsquerda ? curvaDireita : -curvaEsquerda;
+  
+    let intervalId = setInterval(() => {
+      if (curva > 0) {
+        this.direction += 3;
+        if (this.direction >= 360) {
+          this.direction = 0;
+        }
+        curva -= 3;
+      } else if (curva < 0) {
+        this.direction -= 3;
+        if (this.direction < 0) {
+          this.direction = 360 + this.direction;
+        }
+        curva += 3;
+      } else {
+        clearInterval(intervalId);
+      }
+      let velocities = this.calculateVelocities(this.speed, this.direction);
+      this.velX = velocities.velX;
+      this.velY = velocities.velY;
+    }, 1000);
+  }
+  
 
 
 }

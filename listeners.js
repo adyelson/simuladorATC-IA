@@ -201,11 +201,13 @@ function pressKeyTalk(event) {
             // Pega a primeira frase reconhecida
             const firstResult = event.results[0][0].transcript;
             let listaPalavras = firstResult.split(' ');
-
+            
             listaPalavras.forEach((element, index) => {
                 console.log(`${index}:${element}`)
             });
 
+            let mensagemAenviar = `${listaPalavras[0]+listaPalavras[1]}, ${listaPalavras.slice(2)}`
+            console.log(mensagemAenviar)
             let mensagemAnalisada = analisarChamadaAeronautica(firstResult)
             console.log(mensagemAnalisada)
         });

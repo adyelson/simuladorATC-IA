@@ -9,8 +9,10 @@ export default class Aircraft {
     this.speed = speed;
     this.direction = direction;
     const { x, y } = this.convertLatLongToXY(lat, long);
+    this.x = x;
+    this.y = y;
     const { velX, velY } = this.calculateVelocities(speed, direction);
-    this.updatePosition(x, y);
+    this.updatePastPosition(x, y);
     this.velX = velX;
     this.velY = velY;
     this.labelX = this.x + 40;
@@ -39,9 +41,8 @@ export default class Aircraft {
     return { velX, velY };
   }
 
-  updatePosition(x, y) {
-    this.x = x;
-    this.y = y;
+  updatePastPosition(x, y) {
+    
     this.positions.push({ x: this.x, y: this.y });
     if (this.positions.length > 9) {
       this.positions.shift();
@@ -53,7 +54,7 @@ export default class Aircraft {
     this.y += this.velY;
     this.labelX += this.velX;
     this.labelY += this.velY;
-    this.updatePosition(this.x, this.y);
+    this.updatePastPosition(this.x, this.y);
   }
 
 
@@ -80,27 +81,47 @@ export default class Aircraft {
 
   }
 
-  mudarProa(proa) {
+
+  // proa , direita, esquerda
+  mudarProa(proa, ladoCurva) {
     const proaAtual = this.direction;
     const menorCurva = Math.abs(proaAtual - proa);
     const maiorCurva = 360 - menorCurva;
     const curvaDireita = proaAtual <= proa ? menorCurva : maiorCurva;
     const curvaEsquerda = proaAtual <= proa ? maiorCurva : menorCurva;
-    let curva = curvaDireita <= curvaEsquerda ? curvaDireita : -curvaEsquerda;
-  
+    let curva;
+
+    if (ladoCurva === "esquerda") {
+      curva = -curvaEsquerda;
+    } else if (ladoCurva === "direita") {
+      curva = curvaDireita;
+    } else {
+      curva = curvaDireita <= curvaEsquerda ? curvaDireita : -curvaEsquerda;
+    }
+
     let intervalId = setInterval(() => {
       if (curva > 0) {
-        this.direction += 3;
+        if (curva <= 3) {
+          this.direction += curva;
+          curva = 0;
+        } else {
+          this.direction += 3;
+          curva -= 3;
+        }
         if (this.direction >= 360) {
-          this.direction = 0;
+          this.direction -= 360;
         }
-        curva -= 3;
       } else if (curva < 0) {
-        this.direction -= 3;
-        if (this.direction < 0) {
-          this.direction = 360 + this.direction;
+        if (curva >= -3) {
+          this.direction += curva;
+          curva = 0;
+        } else {
+          this.direction -= 3;
+          curva += 3;
         }
-        curva += 3;
+        if (this.direction < 0) {
+          this.direction += 360;
+        }
       } else {
         clearInterval(intervalId);
       }
@@ -109,7 +130,7 @@ export default class Aircraft {
       this.velY = velocities.velY;
     }, 1000);
   }
-  
+
 
 
 }

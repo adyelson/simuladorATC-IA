@@ -15,6 +15,21 @@ import {
 } from './variables.js';
 
 export const canvas = document.querySelector('#myCanvas');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  
+    // Outras ações relacionadas ao redimensionamento, se necessário
+    // ...
+  }
+  
+  // Chama a função resizeCanvas para definir o tamanho inicial do canvas
+  resizeCanvas();
+  
+  // Adiciona um listener de evento para redimensionar o canvas quando a janela for redimensionada
+  window.addEventListener('resize', resizeCanvas);
+
 export const context = canvas.getContext('2d');
 const ctxAircraft = canvas.getContext('2d');
 const ctxLabel = canvas.getContext('2d');
@@ -71,6 +86,7 @@ export function drawAircraft(aircraft) {
 
 
 function drawLabel(aircraft) {
+    
     const rect = canvas.getBoundingClientRect();
     const labelX = (aircraft.labelX - rect.left) / getScale();
     const labelY = (aircraft.labelY - rect.top) / getScale();
@@ -104,7 +120,7 @@ function drawLabel(aircraft) {
     ctxLabel.fillText('' + aircraft.callsign, labelX + 5 / getScale(), labelY + 15 / getScale()); // Utiliza as posições relativas
     ctxLabel.fillText('' + aircraft.depLocation, labelX + 5 / getScale(), labelY + 30 / getScale()); // Utiliza as posições relativas
     ctxLabel.fillText('' + aircraft.arrLocation, labelX + 50 / getScale(), labelY + 30 / getScale()); // Utiliza as posições relativas
-    ctxLabel.fillText('FL ' + Math.floor(aircraft.flightLevel / 100), labelX + 5 / getScale(), labelY + 47 / getScale()); // Utiliza as posições relativas
+    ctxLabel.fillText('' + Math.floor(aircraft.flightLevel / 100), labelX + 5 / getScale(), labelY + 47 / getScale()); // Utiliza as posições relativas
     const resultantVector = Math.sqrt(aircraft.velX ** 2 + aircraft.velY ** 2).toFixed(2);
     ctxLabel.fillText('' + resultantVector, labelX + 5 / getScale(), labelY + 62 / getScale()); // Utiliza as posições relativas
 }

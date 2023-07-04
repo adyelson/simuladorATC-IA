@@ -47,7 +47,7 @@ function handleMouseWheel(event) {
     }
 
     // Limita a escala mínima e máxima
-    setScale(Math.max(0.5, Math.min(getScale(), 2)));
+    setScale(Math.max(0.8, Math.min(getScale(), 1.7)));
 
 
     drawAllAircrafts();
@@ -160,14 +160,17 @@ function pressKeyR(event) {
 
         for (let callsign in aircrafts) {
             if (aircrafts.hasOwnProperty(callsign)) {
-                aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
-                aircrafts[callsign].labelX = aircrafts[callsign].x + 40;
+                aircrafts[callsign].labelX = (aircrafts[callsign].x + 40);
+                aircrafts[callsign].labelY = (aircrafts[callsign].y - 50);
             }
         }
     }
 }
 
 function pressKeyNumber(event) {
-    setvetorTime(event.key);
+    let number = parseInt(event.key);
+    if(number>=0 && number <=9){
+        setvetorTime(event.key);
+    }
     drawAllAircrafts();
 }

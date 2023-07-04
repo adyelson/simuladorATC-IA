@@ -19,7 +19,7 @@ import {
     setSelectedAircraft,
     setvetorTime
 } from './variables.js';
-
+import { analisarChamadaAeronautica } from './commands.js';
 import { mostrarCursor } from './mousenatela.js';
 
 export let zoom = canvas.addEventListener('wheel', handleMouseWheel);
@@ -35,6 +35,7 @@ canvas.addEventListener('mouseup', handleMouseUp);
 
 document.addEventListener("keydown", pressKeyR);
 document.addEventListener("keydown", pressKeyNumber);
+document.addEventListener("keydown", pressKeyTalk);
 
 function handleMouseWheel(event) {
     const zoomSpeed = 0.1; // Velocidade do zoom
@@ -169,8 +170,44 @@ function pressKeyR(event) {
 
 function pressKeyNumber(event) {
     let number = parseInt(event.key);
-    if(number>=0 && number <=9){
+    if (number >= 0 && number <= 9) {
         setvetorTime(event.key);
     }
     drawAllAircrafts();
+}
+
+function pressKeyTalk(event) {
+    
+    if (event.key === "t" || event.key === "T") {
+
+        const recognition = new webkitSpeechRecognition();
+        // Defina o idioma que será reconhecido (no caso, o português do Brasil)
+        recognition.lang = 'pt-BR';
+        // Iniciar a reconhecimento de fala
+
+        recognition.start();
+
+        // Criar um evento para processar o resultado da fala reconhecida
+        recognition.onresult = (event) => {
+            // Obter o primeiro resultado da fala reconhecida
+            const speechToText = event.results[0][0].transcript;
+            // Escrever o resultado na página
+            // document.write(speechToText);
+            console.log(speechToText)
+        };
+
+        // Quando o reconhecimento de voz receber uma frase, faça algo com ela
+        recognition.addEventListener('result', (event) => {
+            // Pega a primeira frase reconhecida
+            const firstResult = event.results[0][0].transcript;
+            let listaPalavras = firstResult.split(' ');
+
+            listaPalavras.forEach((element, index) => {
+                console.log(`${index}:${element}`)
+            });
+
+            let mensagemAnalisada = analisarChamadaAeronautica(firstResult)
+            console.log(mensagemAnalisada)
+        });
+    }
 }

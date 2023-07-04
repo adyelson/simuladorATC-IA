@@ -1,4 +1,4 @@
-function analisarChamadaAeronautica(texto) {
+export function analisarChamadaAeronautica(texto) {
     const padraoCurva = /^([A-Z]{2,3}\d+),\s*curve\s+(a\s+)?(\w+)\s+proa\s+(\d+)$/i;
     const padraoSubida = /^([A-Z]{2,3}\d+),\s*suba\s+para\s+nivel\s+de\s+voo\s+(\d+),\s*com\s+razão\s+de\s+(\d+)\s+pés$/i;
     const padraoDescida = /^([A-Z]{2,3}\d+),\s*desça\s+para\s+nivel\s+de\s+voo\s+(\d+),\s*com\s+razão\s+de\s+(\d+)\s+pés$/i;

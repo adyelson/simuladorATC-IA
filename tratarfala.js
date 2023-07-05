@@ -17,7 +17,7 @@ export function analisarChamadaAeronautica(texto) {
 
   }
 
-  if (comandos.includes("curve")) {
+  if (comandos.includes("curve") || comandos.includes("curva")) {
     const instrucao = "Curvar";
     const curveIndex = comandos.indexOf("curve");
     const ladoIndex = curveIndex + 2;
@@ -61,7 +61,7 @@ export function analisarChamadaAeronautica(texto) {
     };
   }
 
-  if (comandos.includes("reduza") || comandos.includes("aumente") || comandos.includes("acelere")) {
+  if (comandos.includes("reduza") || comandos.includes("aumente") || comandos.includes("acelere")|| comandos.includes("acelera")) {
     const instrucao = comandos.includes("reduza") ? "Reduzir" : "Acelerar";
     const velocidadeIndex = comandos.indexOf("reduza") !== -1 ? comandos.indexOf("reduza") : comandos.indexOf("aumente");
     const velocidadeTokens = comandos.slice(velocidadeIndex + 1);

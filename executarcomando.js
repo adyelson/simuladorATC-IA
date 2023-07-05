@@ -1,6 +1,6 @@
 export function requestCommand(instructions) {
     const callsign = instructions;
-    console.log("ola:"+callSign)
+    console.log("ola:"+instructions)
     const callSigns = Object.keys(aircrafts).map(key => aircrafts[key].callsign);
 
     const resultado = procurarCallsign(callsign, callSigns);

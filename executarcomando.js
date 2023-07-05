@@ -34,12 +34,7 @@ export function requestCommand(instructions) {
             break;
     }
 
-
-    // pela mensagem identificar aeronave
-
-    // comando
-
-    // parametros do comando
+ 
     aircrafts[choosenAircraft][method](listParams);
 }
 

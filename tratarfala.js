@@ -1,9 +1,18 @@
 export function analisarChamadaAeronautica(texto) {
   const comandos = texto.split(" ");
   let chamado = extrairCodigo(texto);
-  
-  if(!chamado){
-    chamado = comandos.shift();
+
+  if (!chamado) {
+    let p1 = comandos.shift();
+    // Verificar o callsign
+    const callsignCheck = verificarCallsign(p1, callSigns);
+    if (callsignCheck.callsign) {
+      p1 = callsignCheck.callsign;
+    }
+
+    let p2 = comandos.shift();
+    chamado = p1 + p2;
+    
   }
 
   if (comandos.includes("curve")) {
@@ -82,9 +91,23 @@ export function analisarChamadaAeronautica(texto) {
   return null;
 }
 
+const relacaoCallsigns = {
+  "azul": "AZU",
+  "korean air": "KAL",
+  // Adicione outras relações conforme necessário
+};
+
+function verificarRelacaoCallsign(callsign) {
+  for (const [key, value] of Object.entries(relacaoCallsigns)) {
+    if (callsign.toLowerCase().includes(key)) {
+      return value;
+    }
+  }
+  return null;
+}
 
 // Exemplo de chamada para teste
-const chamada1 = "TAM2232 curve a esquerda proa 200";
+const chamada1 = "TAM 2232 curve a esquerda proa 200";
 const chamada2 = "CO122 suba para nivel de voo 200, com razão de 500 pés";
 const chamada3 = "Papa Tango Whiskey Tango Alfa reduza para velocidade 200 knots";
 const chamada4 = "PTWTA, reduza para 200 knots";

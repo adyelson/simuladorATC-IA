@@ -37,7 +37,9 @@ export function requestCommand(instructions) {
         default:
             break;
     }
-
+    console.log(choosenAircraft)
+    console.log(method)
+    console.log(listParams)
  
     aircrafts[choosenAircraft][method](listParams);
 }

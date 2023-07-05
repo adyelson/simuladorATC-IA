@@ -1,5 +1,8 @@
 export function requestCommand(instructions) {
     const callsign = instructions;
+    for (var key in instructions) {
+        console.log(key + ": " + instructions[key]);
+      }
     console.log("ola:"+instructions)
     const callSigns = Object.keys(aircrafts).map(key => aircrafts[key].callsign);
 

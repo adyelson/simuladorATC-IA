@@ -83,7 +83,9 @@ export default class Aircraft {
 
 
   // proa , direita, esquerda
-  mudarProa(proa, ladoCurva) {
+  mudarProa(param) {
+    let proa = param[0];
+    let ladoCurva = param[1];
     const proaAtual = this.direction;
     const menorCurva = Math.abs(proaAtual - proa);
     const maiorCurva = 360 - menorCurva;

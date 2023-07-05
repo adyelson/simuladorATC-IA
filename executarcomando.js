@@ -1,11 +1,11 @@
 export function requestCommand(instructions) {
-    const callsign = instructions;
+    let callsign = instructions['chamado'];
     for (var key in instructions) {
         console.log(key + ": " + instructions[key]);
       }
-    console.log("ola:"+instructions)
+    console.log("ola:"+callsign)
     const callSigns = Object.keys(aircrafts).map(key => aircrafts[key].callsign);
-
+      console.log(callSigns);
     const resultado = procurarCallsign(callsign, callSigns);
     let choosenAircraft = resultado.callsign;
     let method = '';

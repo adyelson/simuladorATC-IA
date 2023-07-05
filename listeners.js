@@ -19,7 +19,8 @@ import {
     setSelectedAircraft,
     setvetorTime
 } from './variables.js';
-import { analisarChamadaAeronautica } from './commands.js';
+import { analisarChamadaAeronautica } from './tratarfala.js';
+import { requestCommand } from './executarcomando.js';
 import { mostrarCursor } from './mousenatela.js';
 
 export let zoom = canvas.addEventListener('wheel', handleMouseWheel);
@@ -210,6 +211,7 @@ function pressKeyTalk(event) {
             console.log(mensagemAenviar)
             let mensagemAnalisada = analisarChamadaAeronautica(firstResult)
             console.log(mensagemAnalisada)
+            requestCommand(mensagemAnalisada);
         });
     }
 }

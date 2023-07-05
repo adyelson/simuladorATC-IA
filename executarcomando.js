@@ -15,24 +15,24 @@ export function requestCommand(instructions) {
     switch (instructions.instrucao) {
         case 'Curvar':
             method = 'mudarProa';
-            listParams = [instructions.proa, instructions.lado]
+            listParams = [parseInt(instructions.proa), instructions.lado]
             break;
         case 'Subir':
             method = 'descer';
-            listParams = [instructions.nivelVoo, instructions.razao]
+            listParams = [parseInt(instructions.nivelVoo), parseInt(instructions.razao)]
             break;
         case 'Descer':
             method = 'descer';
-            listParams = [instructions.nivelVoo, instructions.razao] 
+            listParams = [parseInt(instructions.nivelVoo), parseInt(instructions.razao)] 
             break;
         case 'Acelerar':
             method = 'mudarVelocidade';            
-            listParams = [instructions.velocidade]
+            listParams = [parseInt(instructions.velocidade)]
             break;
 
         case 'Reduzir':
             method = 'mudarVelocidade';
-            listParams = [instructions.velocidade]
+            listParams = [parseInt(instructions.velocidade)]
             break;
         default:
             break;

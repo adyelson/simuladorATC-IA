@@ -111,14 +111,14 @@ function verificarRelacaoCallsign(callsign) {
 
 // Exemplo de chamada para teste
 const chamada1 = "TAM 2232 curve a esquerda proa 200";
-const chamada2 = "CO122 suba para nivel de voo 200, com razão de 500 pés";
+const chamada2 = "CO 122 suba para nivel de voo 200, com razão de 500 pés";
 const chamada3 = "Papa Tango Whiskey Tango Alfa reduza para velocidade 200 knots";
-const chamada4 = "PTWTA, reduza para 200 knots";
+const chamada4 = "azul 2231, reduza para 200 knots";
 const chamada5 = "WTZ, acelere para 200 knots";
-const chamada6 = "CO122, desça para nivel de voo 300, com razão de 700 pés";
+const chamada6 = "CO 122, desça para nivel de voo 300, com razão de 700 pés";
 const chamada7 = "PTWTA, aumente para velocidade 300 knots";
 const chamada8 = "WTA reduza para 200 knots";
-const chamada9 = "CO122 desça para nivel de voo 300, com razão de 700 pés";
+const chamada9 = "CO 122 desça para nivel de voo 300, com razão de 700 pés";
 
 const resultado1 = analisarChamadaAeronautica(chamada1);
 const resultado2 = analisarChamadaAeronautica(chamada2);

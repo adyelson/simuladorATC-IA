@@ -1,12 +1,13 @@
 export function requestCommand(instructions) {
     const callsign = instructions;
+    console.log("ola:"+callSign)
     const callSigns = Object.keys(aircrafts).map(key => aircrafts[key].callsign);
 
     const resultado = procurarCallsign(callsign, callSigns);
     let choosenAircraft = resultado.callsign;
     let method = '';
     let listParams = [];
-    console.log(callSign)
+    
 
     switch (instructions.intrucao) {
         case 'Curvar':

@@ -61,7 +61,7 @@ export function analisarChamadaAeronautica(texto) {
     };
   }
 
-  if (comandos.includes("reduza") || comandos.includes("aumente") || comandos.includes("acelere")|| comandos.includes("acelera")) {
+  if (comandos.includes("reduza") || comandos.includes("aumente") || comandos.includes("acelero") || comandos.includes("acelere")|| comandos.includes("acelera")) {
     const instrucao = comandos.includes("reduza") ? "Reduzir" : "Acelerar";
     const velocidadeIndex = comandos.indexOf("reduza") !== -1 ? comandos.indexOf("reduza") : comandos.indexOf("aumente");
     const velocidadeTokens = comandos.slice(velocidadeIndex + 1);

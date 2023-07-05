@@ -90,10 +90,10 @@ export default class Aircraft {
     const curvaDireita = proaAtual <= proa ? menorCurva : maiorCurva;
     const curvaEsquerda = proaAtual <= proa ? maiorCurva : menorCurva;
     let curva;
-    let listladoCurva = ladoCurva.split(' ');
-    if (listladoCurva.includes("esquerda")) {
+    
+    if (ladoCurva.includes("esquerda")) {
       curva = -curvaEsquerda;
-    } else if (listladoCurva.includes("direita")) {
+    } else if (ladoCurva.includes("direita")) {
       curva = curvaDireita;
     } else {
       curva = curvaDireita <= curvaEsquerda ? curvaDireita : -curvaEsquerda;

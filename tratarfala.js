@@ -1,3 +1,5 @@
+
+
 export function analisarChamadaAeronautica(texto) {
   const comandos = texto.split(" ");
   let chamado = extrairCodigo(texto);
@@ -5,14 +7,14 @@ export function analisarChamadaAeronautica(texto) {
   if (!chamado) {
     let p1 = comandos.shift();
     // Verificar o callsign
-    const callsignCheck = verificarCallsign(p1, callSigns);
-    if (callsignCheck.callsign) {
-      p1 = callsignCheck.callsign;
+    const callsignCheck = verificarRelacaoCallsign(p1);
+    if (callsignCheck) {
+      p1 = callsignCheck;
     }
 
     let p2 = comandos.shift();
     chamado = p1 + p2;
-    
+
   }
 
   if (comandos.includes("curve")) {
@@ -91,13 +93,14 @@ export function analisarChamadaAeronautica(texto) {
   return null;
 }
 
-const relacaoCallsigns = {
-  "azul": "AZU",
-  "korean air": "KAL",
-  // Adicione outras relações conforme necessário
-};
+
 
 function verificarRelacaoCallsign(callsign) {
+  const relacaoCallsigns = {
+    "azul": "AZU",
+    "korean air": "KAL",
+    // Adicione outras relações conforme necessário
+  };
   for (const [key, value] of Object.entries(relacaoCallsigns)) {
     if (callsign.toLowerCase().includes(key)) {
       return value;

@@ -91,9 +91,9 @@ export default class Aircraft {
     const curvaEsquerda = proaAtual <= proa ? maiorCurva : menorCurva;
     let curva;
 
-    if (ladoCurva === "esquerda") {
+    if (ladoCurva.includes("esquerda")) {
       curva = -curvaEsquerda;
-    } else if (ladoCurva === "direita") {
+    } else if (ladoCurva.includes("direita")) {
       curva = curvaDireita;
     } else {
       curva = curvaDireita <= curvaEsquerda ? curvaDireita : -curvaEsquerda;

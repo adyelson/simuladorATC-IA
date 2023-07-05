@@ -27,12 +27,12 @@ export function requestCommand(instructions) {
             break;
         case 'Acelerar':
             method = 'mudarVelocidade';
-            listParams = [instructions.valocidade]
+            listParams = [instructions.velocidade]
             break;
 
         case 'Reduzir':
             method = 'mudarVelocidade';
-            listParams = [instructions.valocidade]
+            listParams = [instructions.velocidade]
             break;
         default:
             break;

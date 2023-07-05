@@ -1,5 +1,5 @@
 export function requestCommand(instructions) {
-    let callsign = instructions['chamado'];
+    let callsign = instructions.chamado;
     for (var key in instructions) {
         console.log(key + ": " + instructions[key]);
       }
@@ -12,7 +12,7 @@ export function requestCommand(instructions) {
     let listParams = [];
     
 
-    switch (instructions.intrucao) {
+    switch (instructions.instrucao) {
         case 'Curvar':
             method = 'mudarProa';
             listParams = [instructions.proa, instructions.lado]
@@ -26,14 +26,12 @@ export function requestCommand(instructions) {
             listParams = [instructions.nivelVoo, instructions.razao] 
             break;
         case 'Acelerar':
-            method = 'mudarVelocidade';
-            
+            method = 'mudarVelocidade';            
             listParams = [instructions.velocidade]
             break;
 
         case 'Reduzir':
             method = 'mudarVelocidade';
-            console.log(instructions.velocidade)
             listParams = [instructions.velocidade]
             break;
         default:
